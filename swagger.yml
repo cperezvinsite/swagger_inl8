@@ -441,8 +441,8 @@ paths:
     get:
       tags:
       - "Scenes"
-      summary: "Api for toggle the presence simulator scene"
-      description: "Toggle presence simulator"
+      summary: "Api for toggle the presence simulator scene "
+      description: "Toggle presence simulator This module only works from 18:00 to 23:59"
       operationId: "presenceSimulator"
       produces:
       - "application/json" 
@@ -512,7 +512,7 @@ paths:
       tags:
       - "Scenes"
       summary: "Api for toggle the energy saving mode scene"
-      description: "Toggle energy saving mode"
+      description: "Toggle energy saving mode\n This module turns off the first light when a fourth is turned on"
       operationId: "energySaving"
       produces:
       - "application/json" 
@@ -643,6 +643,24 @@ paths:
           description: "successful operation"
           schema:
             $ref: "#/definitions/success_response"
+        201:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/success_false_response"
+  /api/v2/scene/excluded-zones:
+    get:
+      tags:
+      - "Scenes"
+      summary: "Api for get excluded "
+      description: "get excluded zones in all scenes"
+      operationId: "getAllExcludedZones"
+      produces:
+      - "application/json" 
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/success_scenes_esxcluded"
         201:
           description: "successful operation"
           schema:
@@ -858,6 +876,114 @@ paths:
             $ref: "#/definitions/success_response"
   
 definitions:
+  success_scenes_esxcluded:
+    type: "object"
+    properties:
+      energy_excluded:
+        type: "object"
+        properties:
+          z1: 
+            type: "integer"
+            enum: [0,1]
+            description: "if 0 this zone is not excluded, if 1 it is excluded"
+          z2: 
+            type: "integer"
+            enum: [0,1]
+            description: "if 0 this zone is not excluded, if 1 it is excluded"
+          z3: 
+            type: "integer"
+            enum: [0,1]
+            description: "if 0 this zone is not excluded, if 1 it is excluded"
+          z4: 
+            type: "integer"
+            enum: [0,1]
+            description: "if 0 this zone is not excluded, if 1 it is excluded"
+          z5: 
+            type: "integer"
+            enum: [0,1]
+            description: "if 0 this zone is not excluded, if 1 it is excluded"
+          z6: 
+            type: "integer"
+            enum: [0,1]
+            description: "if 0 this zone is not excluded, if 1 it is excluded"
+          z7: 
+            type: "integer"
+            enum: [0,1]
+            description: "if 0 this zone is not excluded, if 1 it is excluded"
+          z8: 
+            type: "integer"
+            enum: [0,1]
+            description: "if 0 this zone is not excluded, if 1 it is excluded"
+      presence_excluded:
+        type: "object"
+        properties:
+          z1: 
+            type: "integer"
+            enum: [0,1]
+            description: "if 0 this zone is not excluded, if 1 it is excluded"
+          z2: 
+            type: "integer"
+            enum: [0,1]
+            description: "if 0 this zone is not excluded, if 1 it is excluded"
+          z3: 
+            type: "integer"
+            enum: [0,1]
+            description: "if 0 this zone is not excluded, if 1 it is excluded"
+          z4: 
+            type: "integer"
+            enum: [0,1]
+            description: "if 0 this zone is not excluded, if 1 it is excluded"
+          z5: 
+            type: "integer"
+            enum: [0,1]
+            description: "if 0 this zone is not excluded, if 1 it is excluded"
+          z6: 
+            type: "integer"
+            enum: [0,1]
+            description: "if 0 this zone is not excluded, if 1 it is excluded"
+          z7: 
+            type: "integer"
+            enum: [0,1]
+            description: "if 0 this zone is not excluded, if 1 it is excluded"
+          z8: 
+            type: "integer"
+            enum: [0,1]
+            description: "if 0 this zone is not excluded, if 1 it is excluded"
+      turn_off_all_excluded:
+        type: "object"
+        properties:
+          z1: 
+            type: "integer"
+            enum: [0,1]
+            description: "if 0 this zone is not excluded, if 1 it is excluded"
+          z2: 
+            type: "integer"
+            enum: [0,1]
+            description: "if 0 this zone is not excluded, if 1 it is excluded"
+          z3: 
+            type: "integer"
+            enum: [0,1]
+            description: "if 0 this zone is not excluded, if 1 it is excluded"
+          z4: 
+            type: "integer"
+            enum: [0,1]
+            description: "if 0 this zone is not excluded, if 1 it is excluded"
+          z5: 
+            type: "integer"
+            enum: [0,1]
+            description: "if 0 this zone is not excluded, if 1 it is excluded"
+          z6: 
+            type: "integer"
+            enum: [0,1]
+            description: "if 0 this zone is not excluded, if 1 it is excluded"
+          z7: 
+            type: "integer"
+            enum: [0,1]
+            description: "if 0 this zone is not excluded, if 1 it is excluded"
+          z8: 
+            type: "integer"
+            enum: [0,1]
+            description: "if 0 this zone is not excluded, if 1 it is excluded"
   scene_success:
     type: "object"
     properties:
