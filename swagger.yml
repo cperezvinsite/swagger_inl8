@@ -1,0 +1,1171 @@
+swagger: "2.0"
+info:
+  description: "This is the api for the INL8 V2.X.X <br>Developed By INSITE S.A.S - <b>I+D Team</b><br><ul><li>Camilo Pérez Vélez</li><li>Alejandro Rosso Pérez</li><li>Leonardo Maya Iregui</li><li>David Mora Rodriguez</li>"
+  version: "2.X.Y"
+  title: "INL8"
+  termsOfService: "http://insite.com.co/"
+  contact:
+    name: IOT Support
+    email: "iot@insite.com.co"
+  license:
+    name: "All rights reserved "
+    url: "http://www.insite.com.co"
+externalDocs:
+  description: Find out more docs
+  url: https://insite.com.co/wp-content/uploads/2019/01/INL8.pdf
+basePath: "/"
+tags:
+- name: "HTML"
+  description: "This is the api to get all HTML pages"
+- name: "Ping Sensor"
+  description: "Ping sensor module"
+- name: "Device info"
+  description: "Get all info of the device"
+- name: "Network"
+  description: "Configure the device network API"
+- name: "Device actions"
+  description: "Get functions of device actions"
+- name: "Configurations"
+  description: "Get functions of device actions"
+
+schemes:
+- "http"
+
+paths:
+  /:
+    get:
+      tags:
+      - "HTML"
+      - "Configurations"
+      summary: "Return the HTML of the WIFI configuration panel"
+      description: "This screen is used to change the network configurations, such as the AP which the device is connected."
+      operationId: "getConfigurationsHTML"
+      consumes:
+      - "text/html"
+      produces:
+      - "text/html"
+      responses:
+        200:
+          description: "&#60;html>&#60;/html>"
+  /ping-sensor:
+    get:
+      tags:
+      - "HTML"
+      - "Ping Sensor"
+      summary: "Return the HTML of ping sensor"
+      description: ""
+      operationId: "getPingSensorHTML"
+      consumes:
+      - "text/html"
+      produces:
+      - "text/html"
+      responses:
+        200:
+          description: "&#60;html>&#60;/html>"
+  /api/v2/ping-sensor/info:
+    get:
+      tags:
+      - "Ping Sensor"
+      summary: "Get ping sensor info"
+      description: ""
+      operationId: "pingInfo"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/pingSensorInfo"
+  /api/v2/ping-sensor/switch:
+    get:
+      tags:
+      - "Ping Sensor"
+      summary: "Switch ping sensor state"
+      description: "If the ping sensor is off call this api will turn it on and vice versa"
+      operationId: "pingSwitch"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/pingSensorInfo"
+  /api/v2/ping-sensor:
+    post:
+      tags:
+      - "Ping Sensor"
+      summary: "Edit ping sensor values"
+      description: "Call this api with the required arguments and modify the device values"
+      operationId: "editPingSensor"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "required body arguments"
+          required: true
+          schema:
+            $ref: "#/definitions/editPingSensor"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/pingSensorInfo"
+        201:
+          description: "This is an error"
+          schema:
+            $ref: "#/definitions/success_false_response"
+  /api-version:
+    get:
+      tags:
+      - "Device info"
+      summary: "Return the api version in json"
+      description: "This version is the current api, the number returned here is the number you should use int he url after /api/v# "
+      operationId: "apiVersion"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/ApiVersion"
+  /firmware-update:
+    get:
+      tags:
+      - "Device info"
+      summary: "Update device firmware"
+      description: "If the device has internet connection and has been authenticated on Intelligence server, this method will call the manual firmware update and the device will try to update if there is a new firmware version."
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/success_response"
+  /info:
+    get:
+      tags:
+      - "Device info"
+      summary: "Get all info of the device"
+      description: "This API returns a json with all the information about the device"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/info"
+  /api/v2/time:
+    get:
+      tags:
+      - "Device info"
+      summary: "get the current date the device"
+      description: "get the current date the device"
+      operationId: "getTime"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/getTime"
+  /api/v2/version:
+    get:
+      tags:
+      - "Device info"
+      summary: "get the current firmware version"
+      description: "Get a json with the current firmware version"
+      operationId: "getFwVersion"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/fwVersion"
+  /network/scan:
+    get:
+      tags:
+      - "Network"
+      summary: "Get all networks nearby"
+      description: "This api calls the scan method of the device and return an object with the closer ap"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/networkScan"
+  /network/set-wifi:
+    post:
+      tags:
+      - "Network"
+      summary: "Get all networks nearby"
+      description: "This api calls the scan method of the device and return an object with the closer ap"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "required body arguments"
+          required: true
+          schema:
+            $ref: "#/definitions/setWifi"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/success_response"
+        201:
+          description: "This is an error"
+          schema:
+            $ref: "#/definitions/success_false_response"
+  /api/v2/ota-hour:
+    post:
+      tags:
+      - "Configurations"
+      summary: "set the hour to run auto updates"
+      description: "This set the hour to device for check and download the new firmware. The time is in 24h format"
+      operationId: "setOtaHour"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "required body arguments"
+          required: true
+          schema:
+            $ref: "#/definitions/setOta"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/success_response"
+        201:
+          description: "This is an error"
+          schema:
+            $ref: "#/definitions/success_false_response"
+  /api/v2/thing:
+    put:
+      tags:
+      - "Configurations"
+      summary: "Edit the device"
+      description: "Edit the name, room and the property 'online' of the device"
+      operationId: "editDevice"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "required body arguments"
+          required: true
+          schema:
+            $ref: "#/definitions/editDevice"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/json_info"
+        201:
+          description: "This is an error"
+          schema:
+            $ref: "#/definitions/success_false_response"
+  /api/v2/switch/{zone}:
+    get:
+      tags:
+      - "Device actions"
+      summary: "Swtich a zone"
+      description: "Swtich a zone"
+      operationId: "switchZone"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "zone"
+        in: "path"
+        description: "a zone from 1-8 to manipulate"
+        required: true
+        type: "integer"
+        format: "int64"
+        enum: [1,2,3,4,5,6,7,8]
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/success_response"
+        201:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/success_false_response"
+  /api/v2/turn-on/{zone}:
+    get:
+      tags:
+      - "Device actions"
+      summary: "turn on a zone"
+      description: "turn on a zone"
+      operationId: "turnOn"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "zone"
+        in: "path"
+        description: "a zone from 1-8 to manipulate"
+        required: true
+        type: "integer"
+        format: "int64"
+        enum: [1,2,3,4,5,6,7,8]
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/success_response"
+        201:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/success_false_response"
+  /api/v2/turn-off/{zone}:
+    get:
+      tags:
+      - "Device actions"
+      summary: "turn off a zone"
+      description: "turn off a zone"
+      operationId: "turnOff"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "zone"
+        in: "path"
+        description: "a zone from 1-8 to manipulate"
+        required: true
+        type: "integer"
+        format: "int64"
+        enum: [1,2,3,4,5,6,7,8]
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/success_response"
+        201:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/success_false_response"
+  /api/v2/status:
+    get:
+      tags:
+      - "Device actions"
+      summary: "get json status"
+      description: "get json status"
+      operationId: "getStatus"
+      produces:
+      - "application/json" 
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/device_status"
+        201:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/success_false_response"
+  /api/v2/status/port/{port}:
+    get:
+      tags:
+      - "Device actions"
+      summary: "get json status"
+      description: "get json status and create port for socket communication"
+      operationId: "getStatusPort"
+      parameters:
+      - name: "port"
+        in: "path"
+        description: "the port where the client will connect"
+        required: true
+        type: "integer"
+        format: "int64"
+      produces:
+      - "application/json" 
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/device_status"
+        201:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/success_false_response"
+  /api/v2/status/relays:
+    get:
+      tags:
+      - "Device actions"
+      summary: "get json status of the relay"
+      description: "get json status of the relay"
+      operationId: "getStatusRelays"
+      produces:
+      - "application/json" 
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/device_relay_status"
+        201:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/success_false_response"
+definitions:
+  device_relay_status:
+    type: "object"
+    properties:
+      success: 
+        type: "boolean"
+        default: true
+      relays:
+        type: "object"
+        properties:
+          r1:
+            type: "integer"
+            example: 0
+          r2:
+            type: "integer"
+            example: 0
+          r3:
+            type: "integer"
+            example: 0
+          r4:
+            type: "integer"
+            example: 0
+          r5:
+            type: "integer"
+            example: 0
+          r6:
+            type: "integer"
+            example: 0
+          r7:
+            type: "integer"
+            example: 0
+          r8:
+            type: "integer"
+            example: 0
+  device_status:
+    type: "object"
+    properties:
+      _id: 
+        type: "string"
+      scenesStatus:
+        type: "object"
+        properties:
+          presenceSimulator:
+            type: "object"
+            properties:
+              icon: 
+                type: "string"
+                enum: ["lock.svg", "unlock.svg"]
+          energySaving:
+            type: "object"
+            properties:
+              icon: 
+                type: "string"
+                enum: ["esaveon.svg", "esaveoff.svg"]
+      zones_type:
+        type: "object"
+        properties:
+          z1:
+            description: "type of 1 zone"
+            type: "integer"
+            enum: [1,2,3,4]
+            example: 1
+          z2:
+            description: "type of 2 zone"
+            type: "integer"
+            enum: [1,2,3,4]
+            example: 1
+          z3:
+            description: "type of 3 zone"
+            type: "integer"
+            enum: [1,2,3,4]
+            example: 1
+          z4:
+            description: "type of 4 zone"
+            type: "integer"
+            enum: [1,2,3,4]
+            example: 1
+          z5:
+            description: "type of 5 zone"
+            type: "integer"
+            enum: [1,2,3,4]
+            example: 1
+          z6:
+            description: "type of 6 zone"
+            type: "integer"
+            enum: [1,2,3,4]
+            example: 1
+          z7:
+            description: "type of 7 zone"
+            type: "integer"
+            enum: [1,2,3,4]
+            example: 1
+          z8:
+            description: "type of 8 zone"
+            type: "integer"
+            enum: [1,2,3,4]
+            example: 1
+      zones:
+        type: "object"
+        properties:
+          z1:
+            description: "state of 1 zone"
+            type: "integer"
+            enum: [0,1]
+            example: 0
+          z2:
+            description: "state of 2 zone"
+            type: "integer"
+            enum: [0,1]
+            example: 0
+          z3:
+            description: "state of 3 zone"
+            type: "integer"
+            enum: [0,1]
+            example: 0
+          z4:
+            description: "state of 4 zone"
+            type: "integer"
+            enum: [0,1]
+            example: 0
+          z5:
+            description: "state of 5 zone"
+            type: "integer"
+            enum: [0,1]
+            example: 0
+          z6:
+            description: "state of 6 zone"
+            type: "integer"
+            enum: [0,1]
+            example: 0
+          z7:
+            description: "state of 7 zone"
+            type: "integer"
+            enum: [0,1]
+            example: 0
+          z8:
+            description: "state of 8 zone"
+            type: "integer"
+            enum: [0,1]
+            example: 0
+  editPingSensor:
+    type: "object"
+    properties: 
+      interval:
+        type: "number"
+        example: "20"
+      retry:
+        type: "number"
+        example: "20"
+      address:
+        type: "string"
+  pingSensorInfo:
+    type: "object"
+    properties: 
+      interval:
+        type: "number"
+      retry:
+        type: "number"
+      status:
+        type: "number"
+      address:
+        type: "string"
+  editDevice:
+    type: "object"
+    properties: 
+      name:
+        type: "string"
+      room:
+        type: "string"
+      offline:
+        type: "boolean"
+        example: true
+      r1n:
+        type: "string"
+        description: "Eoom 1 name"
+      r2n:
+        type: "string"
+        description: "Eoom 2 name"
+      r3n:
+        type: "string"
+        description: "Eoom 3 name"
+      r4n:
+        type: "string"
+        description: "Eoom 4 name"
+      r5n:
+        type: "string"
+        description: "Eoom 5 name"
+      r6n:
+        type: "string"
+        description: "Eoom 6 name"
+      r7n:
+        type: "string"
+        description: "Eoom 7 name"
+      r8n:
+        type: "string"
+        description: "Eoom 8 name"
+      z1:
+        type: "string"
+        description: "Zone 1 name"
+      z2:
+        type: "string"
+        description: "Zone 2 name"
+      z3:
+        type: "string"
+        description: "Zone 3 name"
+      z4:
+        type: "string"
+        description: "Zone 4 name"
+      z5:
+        type: "string"
+        description: "Zone 5 name"
+      z6:
+        type: "string"
+        description: "Zone 6 name"
+      z7:
+        type: "string"
+        description: "Zone 7 name"
+      z8:
+        type: "string"
+        description: "Zone 8 name"
+      z1r:
+        description: "Zone 1 room id"
+        type: "string"
+      z2r:
+        description: "Zone 2 room id"
+        type: "string"
+      z3r:
+        description: "Zone 3 room id"
+        type: "string"
+      z4r:
+        description: "Zone 4 room id"
+        type: "string"
+      z5r:
+        description: "Zone 5 room id"
+        type: "string"
+      z6r:
+        description: "Zone 6 room id"
+        type: "string"
+      z7r:
+        description: "Zone 7 room id"
+        type: "string"
+      z8r:
+        description: "Zone 8 room id"
+        type: "string"
+      z1type:
+        description: "Zone 1 type"
+        type: "integer"
+      z2type:
+        description: "Zone 2 type"
+        type: "integer"
+      z3type:
+        description: "Zone 3 type"
+        type: "integer"
+      z4type:
+        description: "Zone 4 type"
+        type: "integer"
+      z5type:
+        description: "Zone 5 type"
+        type: "integer"
+      z6type:
+        description: "Zone 6 type"
+        type: "integer"
+      z7type:
+        description: "Zone 7 type"
+        type: "integer"
+      z8type:
+        description: "Zone 8 type"
+        type: "integer"
+  setOta:
+    type: "object"
+    properties:
+      time:
+        type: "string"
+        example: "02"
+  fwVersion:
+    type: "object"
+    properties:
+      success:
+        type: "boolean"
+      version:
+        type: "string"
+        example: "2.0.0"
+  setWifi:
+    type: "object"
+    properties:
+      ssid:
+        type: "string"
+      password:
+        type: "string"
+      securityType:
+        type: "string"
+  networkScan:
+    type: "object"
+    properties:
+      mac_addr:
+        type: "string"
+      e_mac_addr:
+        type: "string"
+      ssid:
+        type: "array"
+        items:
+          type: "string"
+  info:
+    type: "object"
+    properties:
+      data:
+        type: "object"
+        properties:
+          _id: 
+            type: "string"
+          homeId: 
+            type: "string"
+          room: 
+            type: "string"
+          thingName: 
+            type: "string"
+          thingType: 
+            type: "string"
+            example: "thing"
+          mac: 
+            type: "string"
+          type: 
+            type: "string"
+          apiVersion: 
+            type: "string"
+          mobile:
+            type: "boolean"
+            default: false
+          position:
+            type: "string"
+          draw:
+            type: "boolean"
+          connections:
+            type: "array"
+            items:
+              type: "object"
+              properties:
+                t:
+                  type: "string"
+          os:
+            type: "object"
+            properties:
+              n:
+                type: "string"
+              v:
+                type: "string"
+          hw:
+            type: "object"
+            properties:
+              n:
+                type: "string"
+              v:
+                type: "string"
+          commandLib:
+            type: "object"
+            properties:
+              status:
+                type: "object"
+                properties:
+                  name:
+                    type: "string"
+                    example: "status"
+                  url:
+                    type: "string"
+                    example: "/status/"
+                  connectionType:
+                    type: "string"
+                    example: "ip"
+                  hideInMacro:
+                    type: "boolean"
+                    default: true
+                  method:
+                    type: "string"
+                    example: "GET"
+              switch:
+                type: "object"
+                properties:
+                  name:
+                    type: "string"
+                    example: "Switch"
+                  url:
+                    type: "string"
+                    example: "/switch/"
+                  connectionType:
+                    type: "string"
+                    example: "ip"
+                  useParams:
+                    type: "boolean"
+                    default: true
+                  method:
+                    type: "string"
+                    example: "GET"
+              presenceSimulator:
+                type: "object"
+                properties:
+                  name:
+                    type: "string"
+                    example: "Simulador de presencia"
+                  url:
+                    type: "string"
+                    example: "/simulator/"
+                  connectionType:
+                    type: "string"
+                    example: "ip"
+                  method:
+                    type: "string"
+                    example: "GET"
+              energySaving:
+                type: "object"
+                properties:
+                  name:
+                    type: "string"
+                    example: "Ahorro de energía"
+                  url:
+                    type: "string"
+                    example: "/energy-saving/"
+                  connectionType:
+                    type: "string"
+                    example: "ip"
+                  method:
+                    type: "string"
+                    example: "GET"
+              turnOn:
+                type: "object"
+                properties:
+                  name:
+                    type: "string"
+                    example: "Encender"
+                  url:
+                    type: "string"
+                    example: "/turn-on/"
+                  connectionType:
+                    type: "string"
+                    example: "ip"
+                  method:
+                    type: "string"
+                    example: "GET"
+                  useParams:
+                    type: "boolean"
+                    default: true
+              turnOff:
+                type: "object"
+                properties:
+                  name:
+                    type: "string"
+                    example: "Apagar"
+                  url:
+                    type: "string"
+                    example: "/turn-off/"
+                  connectionType:
+                    type: "string"
+                    example: "ip"
+                  method:
+                    type: "string"
+                    example: "GET"
+                  useParams:
+                    type: "boolean"
+                    default: true
+              turnOnAll:
+                type: "object"
+                properties:
+                  name:
+                    type: "string"
+                    example: "Encender Todo"
+                  url:
+                    type: "string"
+                    example: "/turn-on-all/"
+                  connectionType:
+                    type: "string"
+                    example: "ip"
+                  method:
+                    type: "string"
+                    example: "GET"
+              turnOffAll:
+                type: "object"
+                properties:
+                  name:
+                    type: "string"
+                    example: "Apagar Todo"
+                  url:
+                    type: "string"
+                    example: "/turn-off-all/"
+                  connectionType:
+                    type: "string"
+                    example: "ip"
+                  method:
+                    type: "string"
+                    example: "GET"
+                  
+          graphics:
+            type: "object"
+            properties:
+              type: 
+                type: "string"
+                example: "lights"
+              icon: 
+                type: "string"
+                example: "shades"
+              family: 
+                type: "string"
+                example: "lights"
+              menuType: 
+                type: "string"
+                example: "inl-8"
+              showInMenu: 
+                type: "boolean"
+                default: false
+              noBlocks: 
+                type: "boolean"
+                default: true
+              useInmoteScenes:
+                type: "boolean"
+                default: true
+              room:
+                type: "object"
+                properties:
+                  r1: 
+                    type: "object"
+                    properties:
+                      name:
+                        type: "string"
+              zones:
+                type: "object"
+                properties:
+                  z1: 
+                    type: "object"
+                    properties:
+                      s:
+                        type: "integer"
+                        example: 0
+                        enum: [0,1]
+                        description: "zone state, 1 is on 0 is off"
+                      n:
+                        type: "string"
+                        example: "zone_name"
+                      rid:
+                        type: "string"
+                        description: "id of the room"
+                        example: "r1"
+                      id:
+                        type: "integer"
+                        example: 1
+                      z1_type:
+                        type: "integer"
+                        example: 1
+                        description: "luz:1\n alarm:2\n subir cortina:3\n bajar cortina:4"
+                        enum: [1,2,3,4]
+  json_info:
+    type: "object"
+    properties:
+        _id: 
+          type: "string"
+        homeId: 
+          type: "string"
+        room: 
+          type: "string"
+        thingName: 
+          type: "string"
+        mac: 
+          type: "string"
+        type: 
+          type: "string"
+        apiVersion: 
+          type: "string"
+        mobile:
+          type: "boolean"
+          default: false
+        position:
+          type: "string"
+        draw:
+          type: "boolean"
+        connections:
+          type: "array"
+          items:
+            type: "object"
+            properties:
+              t:
+                type: "string"
+        os:
+          type: "object"
+          properties:
+            n:
+              type: "string"
+            v:
+              type: "string"
+        hw:
+          type: "object"
+          properties:
+            n:
+              type: "string"
+            v:
+              type: "string"
+        commandLib:
+          type: "object"
+          properties:
+            moveForward:
+              type: "object"
+              properties:
+                name:
+                  type: "string"
+                  example: "Bajar"
+                url:
+                  type: "string"
+                  example: "/move/1"
+                connectionType:
+                  type: "string"
+                  example: "ip"
+                method:
+                  type: "string"
+                  example: "GET"
+            moveBackward:
+              type: "object"
+              properties:
+                name:
+                  type: "string"
+                  example: "Subir"
+                url:
+                  type: "string"
+                  example: "/move/0"
+                connectionType:
+                  type: "string"
+                  example: "ip"
+                method:
+                  type: "string"
+                  example: "GET"
+            stop:
+              type: "object"
+              properties:
+                name:
+                  type: "string"
+                  example: "Stop"
+                url:
+                  type: "string"
+                  example: "/stop"
+                connectionType:
+                  type: "string"
+                  example: "ip"
+                method:
+                  type: "string"
+                  example: "GET"
+            getSchedule:
+              type: "object"
+              properties:
+                name:
+                  type: "string"
+                  example: "Calendario"
+                url:
+                  type: "string"
+                  example: "/schedule/"
+                connectionType:
+                  type: "string"
+                  example: "ip"
+                method:
+                  type: "string"
+                  example: "GET"
+            removeSchedule:
+              type: "object"
+              properties:
+                name:
+                  type: "string"
+                  example: "Borrar Calendario"
+                url:
+                  type: "string"
+                  example: "/schedule/"
+                useParams: 
+                  type: "boolean"
+                connectionType:
+                  type: "string"
+                  example: "ip"
+                method:
+                  type: "string"
+                  example: "DELETE"
+            createSchedule:
+              type: "object"
+              properties:
+                name:
+                  type: "string"
+                  example: "Crear Calendario"
+                url:
+                  type: "string"
+                  example: "/schedule/"
+                connectionType:
+                  type: "string"
+                  example: "ip"
+                method:
+                  type: "string"
+                  example: "POST"
+        graphics:
+          type: "object"
+          properties:
+            type: 
+              type: "string"
+              example: "menu"
+            icon: 
+              type: "string"
+              example: "shades"
+            family: 
+              type: "string"
+              example: "curtains"
+            graphicRepresentation: 
+              type: "string"
+              example: "custom_menu"
+            showInMenu: 
+              type: "boolean"
+            useMenuType: 
+              type: "boolean"
+            noBlocks: 
+              type: "boolean"
+  success_response:
+    type: "object"
+    properties:
+      success:
+        type: "boolean"
+        default: true
+  success_false_response:
+    type: "object"
+    properties:
+      success:
+        type: "boolean"
+        default: false
+      error:
+        type: "string"
+  ApiVersion: 
+    type: "object"
+    properties:
+      version:
+        type: "integer"
+        example: 2
+  getTime:
+    type: "object"
+    properties:
+      success:
+        type: "boolean"
+      time:
+        type: "string"
+        example: "Fri Jan 25 13:14:19 2019"
