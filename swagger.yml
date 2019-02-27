@@ -29,6 +29,8 @@ tags:
   description: "Get functions of device actions"
 - name: "Scenes"
   description: "Api fos turn of all, presence simulator and energy saving scenes"
+- name: "dsPIC"
+  description: "Control dsPIC stuff."
 
 schemes:
 - "http"
@@ -645,6 +647,216 @@ paths:
           description: "successful operation"
           schema:
             $ref: "#/definitions/success_false_response"
+  
+  /api/v2/pic/enable-sensors:
+    get:
+      summary: "Enable dsPIC zones sensors."
+      description:
+        "When current sensors are enable, the on/off state of each zone will be 
+        determined by the amount of current flowing through the corresponding 
+        sensor."
+      operationId: "dspic-enable-sensors"
+      tags:
+        - "dsPIC"
+      produces:
+       - "application/json"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            $ref: "#/definitions/success_response"
+            
+  /api/v2/pic/disable-sensors:
+    get:
+      summary: "Disable dsPIC zones sensors."
+      description:
+        "When current sensors are disable, the on/off state of each zone will be 
+        determined by the state of the corresponding relay."
+      operationId: "dspic-disable-sensors"
+      tags:
+        - "dsPIC"
+      produces:
+        - "application/json"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            $ref: "#/definitions/success_response"
+  
+  /api/v2/pic/enable-reset:
+    get:
+      summary: "Enable dsPIC reset pin."
+      description:
+        "ESP32 can restart dsPIC."
+      operationId: "dspic-enable-reset"
+      tags:
+        - "dsPIC"
+      produces:
+       - "application/json"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            $ref: "#/definitions/success_response"
+            
+  /api/v2/pic/disable-reset:
+    get:
+      summary: "Disable dsPIC reset pin."
+      description:
+        "ESP32 cannot restart dsPIC."
+      operationId: "dspic-disable-reset"
+      tags:
+        - "dsPIC"
+      produces:
+        - "application/json"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            $ref: "#/definitions/success_response"
+  
+  /api/v2/pic/version:
+    get:
+      summary: "Get dsPIC firmware version."
+      description: "Returns version of firmware running on the dsPIC."
+      operationId: "dspic-version"
+      tags:
+        - "dsPIC"
+      produces:
+       - "application/json"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            $ref: "#/definitions/dspic_ver_response"
+  
+  /api/v2/pic/reboot:
+    get:
+      summary: "Reboot dsPIC."
+      description:
+        "Perform a soft reset of dsPIC. Current configurations are conserved."
+      operationId: "dspic-reboot"
+      tags:
+        - "dsPIC"
+      produces:
+       - "application/json"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            $ref: "#/definitions/success_response"
+  
+  /api/v2/pic/factory-reset:
+    get:
+      summary: "Restore dsPIC factory defaults."
+      description:
+        "Perform a soft reset of dsPIC. Current configurations are conserved."
+      operationId: "dspic-factory-reset"
+      tags:
+        - "dsPIC"
+      produces:
+       - "application/json"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            $ref: "#/definitions/success_response"
+  
+  /api/v2/pic/enable-debug:
+    get:
+      summary: "Enable dsPIC debug printf's."
+      description:
+        "dsPIC will send debug values through the UART."
+      operationId: "dspic-enable-debug"
+      tags:
+        - "dsPIC"
+      produces:
+       - "application/json"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            $ref: "#/definitions/success_response"
+            
+  /api/v2/pic/disable-debug:
+    get:
+      summary: "Disable dsPIC debug printf's."
+      description:
+        "dsPIC will not send debug values through the UART."
+      operationId: "dspic-disable-debug"
+      tags:
+        - "dsPIC"
+      produces:
+        - "application/json"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            $ref: "#/definitions/success_response"
+  
+  /api/v2/pic/get-threshold/{sensor}:
+    get:
+      summary: "Get zone sensor decision thresholds."
+      description:
+        "Return current decision thresholds."
+      operationId: "dspic-get-threshold"
+      tags:
+        - "dsPIC"
+      parameters:
+      - in: "path"
+        name: "sensor"
+        description: "Zone sensor id."
+        required: true
+        type: "integer"
+        minimum: 1
+        maximum: 8
+      produces:
+        - "application/json"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            $ref: "#/definitions/dspic_thr_response"
+  
+  /api/v2/pic/set-threshold/{sensor}/{thr_l}/{thr_h}:
+    get:
+      summary: "Set zone sensor decision thresholds."
+      description:
+        "Set decision thresholds for the given zone.
+        If sensor reading is above lower threshold and below upper threshold, 
+        the zone is considered ON, otherwise, it is considered OFF."
+      operationId: "dspic-set-threshold"
+      tags:
+        - "dsPIC"
+      parameters:
+      - in: "path"
+        name: "sensor"
+        description: "Zone sensor id."
+        required: true
+        type: "integer"
+        minimum: 1
+        maximum: 8
+      - in: "path"
+        name: "thr_l"
+        description: "Lower threshold."
+        required: true
+        type: "integer"
+        format: "int32"
+      - in: "path"
+        name: "thr_h"
+        description: "Upper threshold."
+        required: true
+        type: "integer"
+        format: "int32"
+      
+      produces:
+        - "application/json"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            $ref: "#/definitions/success_response"
+  
 definitions:
   scene_success:
     type: "object"
@@ -1392,3 +1604,26 @@ definitions:
       time:
         type: "string"
         example: "Fri Jan 25 13:14:19 2019"
+  dspic_ver_response:
+    type: "object"
+    properties:
+      success:
+        type: "boolean"
+        default: true
+      pic-version:
+        type: "string"
+        example: "1.0.0"
+  dspic_thr_response:
+    type: "object"
+    properties:
+      success:
+        type: "boolean"
+        default: true
+      threshold_low:
+        type: "integer"
+        format: "int32"
+        example: "2000"
+      threshold_high:
+        type: "integer"
+        format: "int32"
+        example: "2000"
