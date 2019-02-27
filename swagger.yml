@@ -27,6 +27,8 @@ tags:
   description: "Get functions of device actions"
 - name: "Configurations"
   description: "Get functions of device actions"
+- name: "Scenes"
+  description: "Api fos turn of all, presence simulator and energy saving scenes"
 
 schemes:
 - "http"
@@ -433,7 +435,228 @@ paths:
           description: "successful operation"
           schema:
             $ref: "#/definitions/success_false_response"
+  /api/v2/simulator:
+    get:
+      tags:
+      - "Scenes"
+      summary: "Api for toggle the presence simulator scene"
+      description: "Toggle presence simulator"
+      operationId: "presenceSimulator"
+      produces:
+      - "application/json" 
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/scene_success"
+        201:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/success_false_response"
+  /api/v2/simulator/exclude/{zone}:
+    get:
+      tags:
+      - "Scenes"
+      summary: "Api for exclude a zone of presence simulator"
+      description: "exclude a zone of presence simulator"
+      operationId: "presenceSimulatoExclude"
+      parameters:
+      - name: "zone"
+        in: "path"
+        description: "a zone from 1-8 to be excluded from presence simulator"
+        required: true
+        type: "integer"
+        format: "int64"
+        enum: [1,2,3,4,5,6,7,8]
+      produces:
+      - "application/json" 
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/success_response"
+        201:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/success_false_response"
+  /api/v2/simulator/include/{zone}:
+    get:
+      tags:
+      - "Scenes"
+      summary: "Api for includ a zone of presence simulator"
+      description: "includ a zone of presence simulator"
+      operationId: "presenceSimulatoInclude"
+      parameters:
+      - name: "zone"
+        in: "path"
+        description: "a zone from 1-8 to be included in presence simulator"
+        required: true
+        type: "integer"
+        format: "int64"
+        enum: [1,2,3,4,5,6,7,8]
+      produces:
+      - "application/json" 
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/success_response"
+        201:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/success_false_response"
+  /api/v2/energy-saving:
+    get:
+      tags:
+      - "Scenes"
+      summary: "Api for toggle the energy saving mode scene"
+      description: "Toggle energy saving mode"
+      operationId: "energySaving"
+      produces:
+      - "application/json" 
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/scene_success"
+        201:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/success_false_response"
+  /api/v2/energy-saving/exclude/{zone}:
+    get:
+      tags:
+      - "Scenes"
+      summary: "Api for exclude a zone of energy saving mode"
+      description: "exclude a zone of energy saving mode"
+      operationId: "energySavingExclude"
+      parameters:
+      - name: "zone"
+        in: "path"
+        description: "a zone from 1-8 to be excluded from energy saving mode"
+        required: true
+        type: "integer"
+        format: "int64"
+        enum: [1,2,3,4,5,6,7,8]
+      produces:
+      - "application/json" 
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/success_response"
+        201:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/success_false_response"
+  /api/v2/energy-saving/include/{zone}:
+    get:
+      tags:
+      - "Scenes"
+      summary: "Api for includ a zone of energy saving"
+      description: "includ a zone of energy saving"
+      operationId: "energySavingInclude"
+      parameters:
+      - name: "zone"
+        in: "path"
+        description: "a zone from 1-8 to be included in energy saving"
+        required: true
+        type: "integer"
+        format: "int64"
+        enum: [1,2,3,4,5,6,7,8]
+      produces:
+      - "application/json" 
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/success_response"
+        201:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/success_false_response"
+  /api/v2/turn-off-all:
+    get:
+      tags:
+      - "Scenes"
+      summary: "Api for run the turn off scene scene"
+      description: "Toggle turn off scene"
+      operationId: "turnOffAll"
+      produces:
+      - "application/json" 
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/success_response"
+        201:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/success_false_response"
+  /api/v2/turn-off-all/exclude/{zone}:
+    get:
+      tags:
+      - "Scenes"
+      summary: "Api for exclude a zone of turn off scene"
+      description: "exclude a zone of turn off scene"
+      operationId: "turnOffAllExclude"
+      parameters:
+      - name: "zone"
+        in: "path"
+        description: "a zone from 1-8 to be excluded from turn off scene"
+        required: true
+        type: "integer"
+        format: "int64"
+        enum: [1,2,3,4,5,6,7,8]
+      produces:
+      - "application/json" 
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/success_response"
+        201:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/success_false_response"
+  /api/v2/turn-off-all/include/{zone}:
+    get:
+      tags:
+      - "Scenes"
+      summary: "Api for includ a zone of turn off scene"
+      description: "includ a zone of turn off scene"
+      operationId: "turnOffAllInclude"
+      parameters:
+      - name: "zone"
+        in: "path"
+        description: "a zone from 1-8 to be included in turn off scene"
+        required: true
+        type: "integer"
+        format: "int64"
+        enum: [1,2,3,4,5,6,7,8]
+      produces:
+      - "application/json" 
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/success_response"
+        201:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/success_false_response"
 definitions:
+  scene_success:
+    type: "object"
+    properties:
+      success:
+        type: "boolean"
+        default: true
+      status:
+        type: "integer"
+        example: 1
+        enum: [1, 0]
+        description: "if 1 the simulator is ON, if 0 is OFF"
   device_relay_status:
     type: "object"
     properties:
