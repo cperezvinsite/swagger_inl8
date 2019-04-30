@@ -28,9 +28,11 @@ tags:
 - name: "Configurations"
   description: "Get functions of device actions"
 - name: "Scenes"
-  description: "Api fos turn of all, presence simulator and energy saving scenes"
+  description: "Api for turn of all, presence simulator and energy saving scenes"
 - name: "dsPIC"
   description: "Control dsPIC stuff."
+- name: "Alarm"
+  description: "Control device alarm module."
 
 schemes:
 - "http"
@@ -660,7 +662,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/success_scenes_esxcluded"
+            $ref: "#/definitions/success_scenes_excluded"
         201:
           description: "successful operation"
           schema:
@@ -875,8 +877,252 @@ paths:
           schema:
             $ref: "#/definitions/success_response"
   
+  /api/v2/alarm:
+    get:
+      description: "Get alarm operating mode."
+      summary: "Get alarm operating mode."
+      operationId: "alarm-get-status"
+      tags:
+        - "Alarm"
+      responses:
+        200:
+          description: "Alarm status."
+          schema:
+            $ref: "#/definitions/alarm_status"
+  
+  /api/v2/alarm/display:
+    put:
+      description: "Enable/disable alarm features."
+      summary: "Enable/disable alarm features."
+      operationId: "alarm-set-display"
+      tags:
+        - "Alarm"
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Set alarm features status."
+          required: true
+          schema:
+            type: "object"
+            properties:
+              status:
+                type: "boolean"
+                example: true
+      responses:
+        200:
+          description: "Success"
+          schema:
+            $ref: "#/definitions/success_response"
+  
+  /api/v2/alarm/room:
+    put:
+      description: "Set alarm room."
+      summary: "Set alarm room."
+      operationId: "alarm-set-room"
+      tags:
+        - "Alarm"
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Set alarm room."
+          required: true
+          schema:
+            type: "object"
+            properties:
+              room:
+                type: "string"
+                example: "General"
+      responses:
+        200:
+          description: "Success"
+          schema:
+            $ref: "#/definitions/success_response"
+  
+  /api/v2/alarm/unlock:
+    get:
+      description: "Get challenge to perform alarm operations."
+      summary: "Get challenge to perform alarm operations."
+      operationId: "alarm-get-challenge"
+      tags:
+        - "Alarm"
+      responses:
+        200:
+          description: "Challenge"
+          schema:
+            $ref: "#/definitions/alarm_challenge_obj"
+  
+  /api/v2/alarm/arm:
+    post:
+      description: "Set alarm operating mode."
+      summary: "Set alarm operating mode."
+      operationId: "alarm-set-mode"
+      tags:
+        - "Alarm"
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Contains authentication data and desired alarm mode."
+          required: true
+          schema:
+            $ref: "#/definitions/alarm_arm_obj"
+      responses:
+        200:
+          description: "Success"
+          schema:
+            $ref: "#/definitions/success_response"
+  
+  /api/v2/alarm/disarm:
+    post:
+      description: "Turn off alarm."
+      summary: "Turn off alarm."
+      operationId: "alarm-turn-off"
+      tags:
+        - "Alarm"
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Contains authentication data."
+          required: true
+          schema:
+            $ref: "#/definitions/alarm_disarm_obj"
+      responses:
+        200:
+          description: "Success"
+          schema:
+            $ref: "#/definitions/success_response"
+  
+  /api/v2/alarm/sensor/{id}:
+    post:
+      description: "Configure alarm sensor."
+      summary: "Configure alarm sensor."
+      operationId: "alarm-config-sensor"
+      tags:
+        - "Alarm"
+      parameters:
+        - in: "path"
+          name: "id"
+          required: true
+          description: "Sensor number."
+          type: "integer"
+          minimum: 1
+          maximum: 6
+        - in: "body"
+          name: "body"
+          required: true
+          description: "Sensor configuration parameters."
+          schema:
+            $ref: "#/definitions/alarm_sensor_cfg_obj"
+      responses:
+        200:
+          description: "Success"
+          schema:
+            $ref: "#/definitions/success_response"
+  
+  /api/v2/alarm/sensor/{id}/chal/{chal}/key/{key}:
+    delete:
+      description: "Delete sensor configuration and disable it."
+      summary: "Delete sensor configuration and disable it."
+      operationId: "alarm-delete-sensor"
+      tags:
+        - "Alarm"
+      parameters:
+        - in: "path"
+          name: "id"
+          required: true
+          description: "Sensor number."
+          type: "integer"
+          minimum: 1
+          maximum: 6
+        - in: "path"
+          name: "chal"
+          required: true
+          type: "integer"
+          format: "uint64"
+        - in: "path"
+          name: "key"
+          required: true
+          type: "string"
+          format: "binary"
+          description: "Authentication key."
+      responses:
+        200:
+          description: "Success"
+          schema:
+            $ref: "#/definitions/success_response"
+  
+  /api/v2/alarm/pin:
+    get:
+      description: "Get Names and slots of stored PINs."
+      summary: "Get Names and slots of stored PINs."
+      operationId: "alarm-get-pins"
+      tags:
+        - "Alarm"
+      responses:
+        200:
+          description: "Stored PINs list."
+          schema:
+            type: "object"
+            properties:
+              success:
+                type: "boolean"
+                example: true
+              pins:
+                type: "array"
+                items:
+                  $ref: "#/definitions/alarm_pin_list_obj"
+    post:
+      description: "Create user PIN."
+      summary: "Create user PIN."
+      operationId: "alarm-create-pin"
+      tags:
+        - "Alarm"
+      parameters:
+        - in: "body"
+          name: "body"
+          required: true
+          description: "Authentication data with ciphered PIN."
+          schema:
+            $ref: "#/definitions/alarm_pin_create_obj"
+      responses:
+        200:
+          description: "Success"
+          schema:
+            $ref: "#/definitions/success_response"
+  
+  /api/v2/alarm/pin/slot/:slot/chal/:chal/key/:key:
+    delete:
+      description: "Delete user PIN."
+      summary: "Delete user PIN."
+      operationId: "alarm-delete-pin"
+      tags:
+        - "Alarm"
+      parameters:
+        - in: "path"
+          name: "slot"
+          required: true
+          description: "PIN slot number."
+          type: "integer"
+          minimum: 1
+          maximum: 9
+        - in: "path"
+          name: "chal"
+          required: true
+          type: "integer"
+          format: "uint64"
+        - in: "path"
+          name: "key"
+          required: true
+          type: "string"
+          format: "binary"
+          description: "Authentication key."
+      responses:
+        200:
+          description: "Success"
+          schema:
+            $ref: "#/definitions/success_response"
+  
 definitions:
-  success_scenes_esxcluded:
+  success_scenes_excluded:
     type: "object"
     properties:
       energy_excluded:
@@ -1753,3 +1999,149 @@ definitions:
         type: "integer"
         format: "int32"
         example: "2000"
+  alarm_modes:
+    type: "integer"
+    enum: &alarm_modes [0, 1, 2, 3]
+    description: >
+      * 0: Alarm is off.
+      
+      * 1: Alarm is in stay mode.
+      
+      * 2: Alarm is in away mode.
+      
+      * 3: Alarm is in away mode with presence simulator.
+  alarm_sensor_modes:
+    type: "integer"
+    enum: &alarm_sensor_modes [0, 1, 2]
+    description: >
+      * 0: Sensor disabled.
+      
+      * 1: Sensor is active in stay and away alarm modes.
+      
+      * 2: Sensor is active only in away alarm mode.
+  alarm_sensor_types:
+    type: "integer"
+    enum: &alarm_sensor_types [0, 1, 2, 3, 4]
+    description: >
+      * 0: Unconfigured.
+      
+      * 1: Motion.
+      
+      * 2: Opening.
+      
+      * 3: Smoke.
+      
+      * 4: Glassbreak.
+  alarm_status:
+    type: "object"
+    properties:
+      success:
+        type: "boolean"
+        example: true
+      room:
+        type: "string"
+        example: "General"
+      mode:
+        type: "integer"
+        enum: *alarm_modes
+        example: 1
+      desc:
+        type: "string"
+        enum: ["off", "stay", "away", "away-sim"]
+        example: "stay"
+  alarm_challenge_obj:
+    type: "object"
+    properties:
+      success:
+        type: "boolean"
+        example: true
+      chal:
+        type: "integer"
+        format: "uint64"
+        example: 666
+  alarm_arm_obj:
+    type: "object"
+    properties:
+      key:
+        type: "string"
+        format: "binary"
+        description: "Authentication key."
+        example: "9eccb3be22d297fe1e0b092018d0ff282d0fdaa1c28af83763b740b458b83423"
+      chal:
+        type: "integer"
+        format: "uint64"
+        example: 666
+      mode:
+        type: "integer"
+        enum: *alarm_modes
+        example: 2
+  alarm_disarm_obj:
+    type: "object"
+    properties:
+      key:
+        type: "string"
+        format: "binary"
+        description: "Authentication key."
+        example: "9eccb3be22d297fe1e0b092018d0ff282d0fdaa1c28af83763b740b458b83423"
+      chal:
+        type: "integer"
+        format: "uint64"
+        example: 666
+  alarm_sensor_cfg_obj:
+    type: "object"
+    properties:
+      key:
+        type: "string"
+        format: "binary"
+        description: "Authentication key."
+        example: "9eccb3be22d297fe1e0b092018d0ff282d0fdaa1c28af83763b740b458b83423"
+      chal:
+        type: "integer"
+        format: "uint64"
+        example: 666
+      name:
+        type: "string"
+        example: "Sensor 1"
+      room:
+        type: "string"
+        example: "General"
+      type:
+        type: "integer"
+        enum: *alarm_sensor_types
+        example: 1
+      mode:
+        type: "integer"
+        enum: *alarm_sensor_modes
+        example: 1
+      delay:
+        type: "integer"
+        format: "uint8"
+        minimum: 0
+        maximum: 60
+        example: 10
+  alarm_pin_create_obj:
+    type: "object"
+    properties:
+      chal:
+        type: "integer"
+        format: "uint64"
+        example: 666
+      pin:
+        type: "string"
+        format: "binary"
+        description: "Ciphered PIN."
+        example: "0161ff9f7fee806f35638b406c180af1"
+      name:
+        type: "string"
+        example: "PIN 1"
+  alarm_pin_list_obj:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+        example: "PIN 1"
+      slot:
+        type: "integer"
+        minimum: 1
+        maximum: 9
+        example: 1
