@@ -28,7 +28,7 @@ tags:
 - name: "Configurations"
   description: "Get functions of device actions"
 - name: "Scenes"
-  description: "Api for turn of all, presence simulator and energy saving scenes"
+  description: "Api for turn off all, presence simulator and energy saving scenes"
 - name: "dsPIC"
   description: "Control dsPIC stuff."
 - name: "Alarm"
@@ -44,7 +44,7 @@ paths:
       - "HTML"
       - "Configurations"
       summary: "Return the HTML of the WIFI configuration panel"
-      description: "This screen is used to change the network configurations, such as the AP which the device is connected."
+      description: "This screen is used to change the network configurations, such as the AP to which the device is connected."
       operationId: "getConfigurationsHTML"
       consumes:
       - "text/html"
