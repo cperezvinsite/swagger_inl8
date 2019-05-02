@@ -1122,6 +1122,20 @@ paths:
             $ref: "#/definitions/success_response"
   
 definitions:
+  success_response:
+    type: "object"
+    properties:
+      success:
+        type: "boolean"
+        default: true
+  success_false_response:
+    type: "object"
+    properties:
+      success:
+        type: "boolean"
+        default: false
+      error:
+        type: "string"
   success_scenes_excluded:
     type: "object"
     properties:
@@ -1559,250 +1573,53 @@ definitions:
         type: "boolean"
       hideInMacro:
         type: "boolean"
-  json_info:
+  zone_types:
+    type: "integer"
+    enum: &zone_types [1, 2, 3, 4, 5]
+    description: >
+      * 1: Light
+      
+      * 2: Shade
+      
+      * 3: Screen
+      
+      * 4: Door
+      
+      * 5: Alarm siren
+  zone_info: &zone_info
     type: "object"
     properties:
-      _id: 
+      id:
+        type: "integer"
+        minimum: 1
+        maximum: 8
+      n:
         type: "string"
-        example: "deadbeef8badbaaaaaadf00d"
-      thingName: 
+      rid:
         type: "string"
-        example: "INL8"
-      homeId: 
-        type: "string"
-        example: "deadbeef8badbaaaaaadf00d"
-      room: 
-        type: "string"
-        example: "General"
-      mac: 
-        type: "string"
-        example: "0a1b2c3d4e5f"
-      type: 
-        type: "string"
-        example: "thing"
-      thingType: 
-        type: "string"
-        example: "lights"
-      apiVersion: 
-        type: "string"
-        example: "/v2"
-      mobile:
-        type: "boolean"
-        default: false
-        example: false
-      position:
-        type: "string"
-        example: "fixed"
-      draw:
-        type: "boolean"
-        default: true
-        example: true
-      connections:
-        type: "array"
-        items:
-          type: "object"
-          properties:
-            t:
-              type: "string"
-              example: "eth"
-      os:
-        type: "object"
-        properties:
-          n:
-            type: "string"
-            example: "FreeRTOS"
-          v:
-            type: "string"
-            example: "V8.2.0"
-      hw:
-        type: "object"
-        properties:
-          n:
-            type: "string"
-            example: "ESP"
-          v:
-            type: "string"
-            example: "32"
-          fVersion:
-            type: "string"
-            example: "3.1.4"
-      commandLib:
-        type: "object"
-        properties:
-          status:
-            <<: *device_cmd
-            example:
-              name: "status"
-              url: "/status/"
-              connectionType: "ip"
-              headers: {}
-              method: "GET"
-              hideInMacro: true
-          switch:
-            <<: *device_cmd
-            example:
-              name: "Switch"
-              url: "/switch/"
-              connectionType: "ip"
-              method: "GET"
-              useParams: true
-          presenceSimulator:
-            <<: *device_cmd
-            example:
-              name: "Simulador de presencia"
-              url: "/simulator/"
-              connectionType: "ip"
-              headers: {}
-              method: "GET"
-          energySaving:
-            <<: *device_cmd
-            example:
-              name: "Ahorro de energía"
-              url: "/energy-saving/"
-              connectionType: "ip"
-              headers: {}
-              method: "GET"
-          turnOn:
-            <<: *device_cmd
-            example:
-              name: "Encender"
-              url: "/turn-on/"
-              connectionType: "ip"
-              headers: {}
-              method: "GET"
-              useParams: true
-          turnOff:
-            <<: *device_cmd
-            example:
-              name: "Apagar"
-              url: "/turn-off/"
-              connectionType: "ip"
-              headers: {}
-              method: "GET"
-              useParams: true
-          turnOnAll:
-            <<: *device_cmd
-            example:
-              name: "Encender Todo"
-              url: "/turn-on-all/"
-              connectionType: "ip"
-              headers: {}
-              method: "GET"
-          turnOffAll:
-            <<: *device_cmd
-            example:
-              name: "Apagar Todo"
-              url: "/turn-off-all/"
-              connectionType: "ip"
-              headers: {}
-              method: "GET"
-          moveDown:
-            <<: *device_cmd
-            example:
-              name: "Bajar"
-              url: "/move-down"
-              connectionType: "ip"
-              headers: {}
-              method: "GET"
-              useParams: true
-          moveUp:
-            <<: *device_cmd
-            example:
-              name: "Subir"
-              url: "/move-up"
-              connectionType: "ip"
-              headers: {}
-              method: "GET"
-              useParams: truemove-down
-          stop:
-            <<: *device_cmd
-            example:
-              name: "Parar"
-              url: "/stop"
-              connectionType: "ip"
-              headers: {}
-              method: "GET"
-              useParams: true
-      graphics:
-        type: "object"
-        properties:
-          type: 
-            type: "string"
-            example: "lights"
-          icon: 
-            type: "string"
-            example: "lights"
-          family: 
-            type: "string"
-            example: "lights"
-          menuType: 
-            type: "string"
-            example: "inl-8"
-          showInMenu: 
-            type: "boolean"
-            default: false
-          noBlocks: 
-            type: "boolean"
-            default: true
-          useInmoteScenes:
-            type: "boolean"
-            default: true
-          useInmoteSecurity:
-            type: "boolean"
-            default: true
-          rooms:
-            type: "object"
-            properties:
-              r1: 
-                type: "object"
-                properties:
-                  name:
-                    type: "string"
-                    example: "General"
-          zones:
-            type: "object"
-            properties:
-              z1: 
-                type: "object"
-                properties:
-                  s:
-                    type: "integer"
-                    example: 0
-                    enum: [0,1]
-                    description: "zone state, 1 is on 0 is off"
-                  n:
-                    type: "string"
-                    example: "zone_name"
-                  rid:
-                    type: "string"
-                    description: "id of the room"
-                    example: "r1"
-                  id:
-                    type: "integer"
-                    example: 1
-                  z1_type:
-                    type: "integer"
-                    example: 1
-                    description: "luz:1\n alarm:2\n subir cortina:3\n bajar cortina:4"
-                    enum: [1,2,3,4]
-  info:
+      type:
+        type: "integer"
+        enum: *zone_types
+      s:
+        type: "integer"
+        enum: [0, 1]
+  custom_zone_info: &custom_zone_info
     type: "object"
     properties:
-      data:
-        $ref: "#/definitions/json_info"
-  success_response:
-    type: "object"
-    properties:
-      success:
+      name:
+        type: "string"
+      room:
+        type: "string"
+      type:
+        type: "integer"
+      pressAndHold:
         type: "boolean"
-        default: true
-  success_false_response:
-    type: "object"
-    properties:
-      success:
-        type: "boolean"
-        default: false
-      error:
+      timeguard:
+        type: "integer"
+        format: "uint32"
+      zup:
+        type: "string"
+      zdown:
         type: "string"
   ApiVersion: 
     type: "object"
@@ -1987,3 +1804,317 @@ definitions:
         minimum: 1
         maximum: 9
         example: 1
+  json_info:
+    type: "object"
+    properties:
+      _id: 
+        type: "string"
+        example: "deadbeef8badbaaaaaadf00d"
+      thingName: 
+        type: "string"
+        example: "INL8"
+      homeId: 
+        type: "string"
+        example: "deadbeef8badbaaaaaadf00d"
+      room: 
+        type: "string"
+        example: "General"
+      mac: 
+        type: "string"
+        example: "0a1b2c3d4e5f"
+      type: 
+        type: "string"
+        example: "thing"
+      thingType: 
+        type: "string"
+        example: "lights"
+      apiVersion: 
+        type: "string"
+        example: "/v2"
+      mobile:
+        type: "boolean"
+        default: false
+        example: false
+      position:
+        type: "string"
+        example: "fixed"
+      draw:
+        type: "boolean"
+        default: true
+        example: true
+      connections:
+        type: "array"
+        items:
+          type: "object"
+          properties:
+            t:
+              type: "string"
+              example: "eth"
+      os:
+        type: "object"
+        properties:
+          n:
+            type: "string"
+            example: "FreeRTOS"
+          v:
+            type: "string"
+            example: "V8.2.0"
+      hw:
+        type: "object"
+        properties:
+          n:
+            type: "string"
+            example: "ESP"
+          v:
+            type: "string"
+            example: "32"
+          fVersion:
+            type: "string"
+            example: "3.1.4"
+      commandLib:
+        type: "object"
+        properties:
+          status:
+            <<: *device_cmd
+            example:
+              name: "status"
+              url: "/status/"
+              connectionType: "ip"
+              headers: {}
+              method: "GET"
+              hideInMacro: true
+          switch:
+            <<: *device_cmd
+            example:
+              name: "Switch"
+              url: "/switch/"
+              connectionType: "ip"
+              method: "GET"
+              useParams: true
+          presenceSimulator:
+            <<: *device_cmd
+            example:
+              name: "Simulador de presencia"
+              url: "/simulator/"
+              connectionType: "ip"
+              headers: {}
+              method: "GET"
+          energySaving:
+            <<: *device_cmd
+            example:
+              name: "Ahorro de energía"
+              url: "/energy-saving/"
+              connectionType: "ip"
+              headers: {}
+              method: "GET"
+          turnOn:
+            <<: *device_cmd
+            example:
+              name: "Encender"
+              url: "/turn-on/"
+              connectionType: "ip"
+              headers: {}
+              method: "GET"
+              useParams: true
+          turnOff:
+            <<: *device_cmd
+            example:
+              name: "Apagar"
+              url: "/turn-off/"
+              connectionType: "ip"
+              headers: {}
+              method: "GET"
+              useParams: true
+          turnOnAll:
+            <<: *device_cmd
+            example:
+              name: "Encender Todo"
+              url: "/turn-on-all/"
+              connectionType: "ip"
+              headers: {}
+              method: "GET"
+          turnOffAll:
+            <<: *device_cmd
+            example:
+              name: "Apagar Todo"
+              url: "/turn-off-all/"
+              connectionType: "ip"
+              headers: {}
+              method: "GET"
+          moveDown:
+            <<: *device_cmd
+            example:
+              name: "Bajar"
+              url: "/move-down"
+              connectionType: "ip"
+              headers: {}
+              method: "GET"
+              useParams: true
+          moveUp:
+            <<: *device_cmd
+            example:
+              name: "Subir"
+              url: "/move-up"
+              connectionType: "ip"
+              headers: {}
+              method: "GET"
+              useParams: truemove-down
+          stop:
+            <<: *device_cmd
+            example:
+              name: "Parar"
+              url: "/stop"
+              connectionType: "ip"
+              headers: {}
+              method: "GET"
+              useParams: true
+      graphics:
+        type: "object"
+        properties:
+          type: 
+            type: "string"
+            example: "lights"
+          menuType: 
+            type: "string"
+            example: "inl-8"
+          inl8V:
+            type: "string"
+            example: "3"
+          icon: 
+            type: "string"
+            example: "lights"
+          showInMenu: 
+            type: "boolean"
+            default: false
+          noBlocks: 
+            type: "boolean"
+            default: true
+          family: 
+            type: "string"
+            example: "lights"
+          useInmoteScenes:
+            type: "boolean"
+            default: true
+          useInmoteSecurity:
+            type: "boolean"
+            default: true
+          rooms:
+            type: "object"
+            properties:
+              r1: 
+                type: "object"
+                properties:
+                  name:
+                    type: "string"
+                    example: "General"
+          zones:
+            type: "object"
+            properties:
+              z1: 
+                <<: *zone_info
+                example:
+                  id: 1
+                  n: "_sh1_up"
+                  rid: "Shades 1 room"
+                  type: 2
+                  s: 0
+              z2: 
+                <<: *zone_info
+                example:
+                  id: 2
+                  n: "_sh1_down"
+                  rid: "Shades 1 room"
+                  type: 2
+                  s: 0
+              z3: 
+                <<: *zone_info
+                example:
+                  id: 3
+                  n: "_dr1_up"
+                  rid: "Door 1 room"
+                  type: 4
+                  s: 0
+              z4: 
+                <<: *zone_info
+                example:
+                  id: 4
+                  n: "_dr1_down"
+                  rid: "Door 1 room"
+                  type: 4
+                  s: 0
+              z5: 
+                <<: *zone_info
+                example:
+                  id: 5
+                  n: "_sc1_up"
+                  rid: "Screen 1 room"
+                  type: 3
+                  s: 0
+              z6: 
+                <<: *zone_info
+                example:
+                  id: 6
+                  n: "_sc1_down"
+                  rid: "Screen 1 room"
+                  type: 3
+                  s: 0
+              z7: 
+                <<: *zone_info
+                example:
+                  id: 7
+                  n: "Light 7"
+                  rid: "r1"
+                  type: 1
+                  s: 0
+              z8: 
+                <<: *zone_info
+                example:
+                  id: 8
+                  n: "Light 8"
+                  rid: "r1"
+                  type: 1
+                  s: 1
+          shades:
+            type: "object"
+            properties:
+              sh1:
+                <<: *custom_zone_info
+                example:
+                  name: "Shades 1"
+                  room: "Shades 1 room"
+                  type: 1
+                  pressAndHold: true
+                  timeguard: 20
+                  zup: "z1"
+                  zdown: "z2"
+          screens:
+            type: "object"
+            properties:
+              sc1:
+                <<: *custom_zone_info
+                example:
+                  name: "Screen 1"
+                  room: "Screen 1 room"
+                  type: 1
+                  pressAndHold: false
+                  timeguard: 30
+                  zup: "z5"
+                  zdown: "z6"
+          doors:
+            type: "object"
+            properties:
+              dr1:
+                <<: *custom_zone_info
+                example:
+                  name: "Door 1"
+                  room: "Door 1 room"
+                  type: 1
+                  pressAndHold: false
+                  timeguard: 10
+                  zup: "z3"
+                  zdown: "z4"
+  info:
+    type: "object"
+    properties:
+      data:
+        $ref: "#/definitions/json_info"
