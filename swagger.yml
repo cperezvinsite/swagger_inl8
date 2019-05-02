@@ -415,6 +415,66 @@ paths:
           description: "This is an error"
           schema:
             $ref: "#/definitions/success_false_response"
+  /api/v2/custom-device:
+    post:
+      description: "Create custom zone on device."
+      summary: "Create custom zone on device."
+      operationId: "create-custom-zone"
+      tags:
+        - "Configurations"
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "New zone info."
+          required: true
+          schema:
+            $ref: "#/definitions/custom_zone_create_obj"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/success_response"
+  /api/v2/custom-device/{id}:
+    put:
+      description: "Edit existing custom zone."
+      summary: "Edit existing custom zone."
+      operationId: "edit-custom-zone"
+      tags:
+        - "Configurations"
+      parameters:
+        - in: "path"
+          name: "id"
+          description: "ID of the zone to be edited."
+          required: true
+          type: "string"
+        - in: "body"
+          name: "body"
+          description: "New zone info."
+          required: true
+          schema:
+            $ref: "#/definitions/custom_zone_info"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/success_response"
+    delete:
+      description: "Delete existing custom zone."
+      summary: "Delete existing custom zone."
+      operationId: "delete-custom-zone"
+      tags:
+        - "Configurations"
+      parameters:
+        - in: "path"
+          name: "id"
+          description: "ID of the zone to be deleted."
+          required: true
+          type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/success_response"
   /api/v2/switch/{zone}:
     get:
       tags:
@@ -493,6 +553,60 @@ paths:
           description: "successful operation"
           schema:
             $ref: "#/definitions/success_false_response"
+  /api/v2/move-up/{id}:
+    get:
+      description: "Move curtain/screen/door up."
+      summary: "Move curtain/screen/door up."
+      operationId: "move-up"
+      tags:
+        - "Device actions"
+      parameters:
+        - in: "path"
+          name: "id"
+          description: "ID of the zone to be moved."
+          required: true
+          type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/success_response"
+  /api/v2/move-down/{id}:
+    get:
+      description: "Move curtain/screen/door down."
+      summary: "Move curtain/screen/door down."
+      operationId: "move-down"
+      tags:
+        - "Device actions"
+      parameters:
+        - in: "path"
+          name: "id"
+          description: "ID of the zone to be moved."
+          required: true
+          type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/success_response"
+  /api/v2/stop/{id}:
+    get:
+      description: "Stop curtain/screen/door movement."
+      summary: "Stop curtain/screen/door movement."
+      operationId: "stop"
+      tags:
+        - "Device actions"
+      parameters:
+        - in: "path"
+          name: "id"
+          description: "ID of the zone to be stopped."
+          required: true
+          type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/success_response"
   /api/v2/status:
     get:
       tags:
@@ -1793,19 +1907,55 @@ definitions:
     properties:
       name:
         type: "string"
+        example: "Zone name"
       room:
         type: "string"
+        example: "Zone room"
       type:
         type: "integer"
+        example: 1
       pressAndHold:
         type: "boolean"
+        example: true
       timeguard:
         type: "integer"
         format: "uint32"
+        example: 30
       zup:
         type: "string"
+        example: "z1"
       zdown:
         type: "string"
+        example: "z2"
+  custom_zone_create_obj:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+        example: "Device name"
+      room:
+        type: "string"
+        example: "Device room"
+      type:
+        type: "integer"
+        enum: *zone_types
+        example: 2
+      deviceType:
+        type: "integer"
+        example: 1
+      pressAndHold:
+        type: "boolean"
+        example: false
+      timeguard:
+        type: "integer"
+        format: "uint32"
+        example: 30
+      zup:
+        type: "string"
+        example: "z3"
+      zdown:
+        type: "string"
+        example: "z4"
   ApiVersion: 
     type: "object"
     properties:
