@@ -292,6 +292,7 @@ paths:
           required:  true
           description:  "Network interface."
           type:  "string"
+          enum: ["eth", "wifi"]
       responses:
         200:
           description: "Success response."
@@ -309,6 +310,7 @@ paths:
           required:  true
           description:  "Network interface."
           type:  "string"
+          enum: ["eth", "wifi"]
         - in: "body"
           name: "body"
           required: true
@@ -333,6 +335,7 @@ paths:
           required:  true
           description:  "Network interface."
           type:  "string"
+          enum: ["eth", "wifi"]
       responses:
         200:
           description: "Success response."
@@ -350,6 +353,7 @@ paths:
           required:  true
           description:  "Network interface."
           type:  "string"
+          enum: ["eth", "wifi"]
         - in: "body"
           name: "body"
           required: true
@@ -444,7 +448,7 @@ paths:
       parameters:
         - in: "path"
           name: "id"
-          description: "ID of the zone to be edited."
+          description: "ID of the zone to be edited. Can be get from JSON info. e.g. sh1, sc2, dr3"
           required: true
           type: "string"
         - in: "body"
@@ -467,7 +471,7 @@ paths:
       parameters:
         - in: "path"
           name: "id"
-          description: "ID of the zone to be deleted."
+          description: "ID of the zone to be deleted. Can be get from JSON info. e.g. sh1, sc2, dr3"
           required: true
           type: "string"
       responses:
@@ -563,7 +567,7 @@ paths:
       parameters:
         - in: "path"
           name: "id"
-          description: "ID of the zone to be moved."
+          description: "ID of the zone to be moved. Can be get from JSON info. e.g. sh1, sc2, dr3"
           required: true
           type: "string"
       responses:
@@ -581,7 +585,7 @@ paths:
       parameters:
         - in: "path"
           name: "id"
-          description: "ID of the zone to be moved."
+          description: "ID of the zone to be moved. Can be get from JSON info. e.g. sh1, sc2, dr3"
           required: true
           type: "string"
       responses:
@@ -599,7 +603,7 @@ paths:
       parameters:
         - in: "path"
           name: "id"
-          description: "ID of the zone to be stopped."
+          description: "ID of the zone to be stopped. Can be get from JSON info. e.g. sh1, sc2, dr3"
           required: true
           type: "string"
       responses:
@@ -1169,8 +1173,8 @@ paths:
   
   /api/v2/alarm/unlock:
     get:
-      description: "Get challenge to perform alarm operations."
-      summary: "Get challenge to perform alarm operations."
+      description: "Get challenge to perform alarm operations that require authentication i.e. a key."
+      summary: "Get challenge to perform alarm operations that require authentication i.e. a key."
       operationId: "alarm-get-challenge"
       tags:
         - "Alarm"
@@ -1182,8 +1186,8 @@ paths:
   
   /api/v2/alarm/arm:
     post:
-      description: "Set alarm operating mode."
-      summary: "Set alarm operating mode."
+      description: "Set alarm operating mode. Get challenge from unlock API and use any user PIN."
+      summary: "Set alarm operating mode. Get challenge from unlock API and use any user PIN."
       operationId: "alarm-set-mode"
       tags:
         - "Alarm"
@@ -1202,8 +1206,8 @@ paths:
   
   /api/v2/alarm/disarm:
     post:
-      description: "Turn off alarm."
-      summary: "Turn off alarm."
+      description: "Turn off alarm. Get challenge from unlock API and use any user PIN."
+      summary: "Turn off alarm. Get challenge from unlock API and use any user PIN."
       operationId: "alarm-turn-off"
       tags:
         - "Alarm"
@@ -1222,8 +1226,8 @@ paths:
   
   /api/v2/alarm/sensor/{id}:
     post:
-      description: "Configure alarm sensor."
-      summary: "Configure alarm sensor."
+      description: "Configure alarm sensor.  Get challenge from unlock API and use master PIN."
+      summary: "Configure alarm sensor. Get challenge from unlock API and use master PIN."
       operationId: "alarm-config-sensor"
       tags:
         - "Alarm"
@@ -1249,8 +1253,8 @@ paths:
   
   /api/v2/alarm/sensor/{id}/chal/{chal}/key/{key}:
     delete:
-      description: "Delete sensor configuration and disable it."
-      summary: "Delete sensor configuration and disable it."
+      description: "Delete sensor configuration and disable it. Get challenge from unlock API and use master PIN."
+      summary: "Delete sensor configuration and disable it. Get challenge from unlock API and use master PIN."
       operationId: "alarm-delete-sensor"
       tags:
         - "Alarm"
@@ -1300,8 +1304,8 @@ paths:
                 items:
                   $ref: "#/definitions/alarm_pin_list_obj"
     post:
-      description: "Create user PIN."
-      summary: "Create user PIN."
+      description: "Create user PIN. Get challenge from unlock API and use master PIN."
+      summary: "Create user PIN. Get challenge from unlock API and use master PIN."
       operationId: "alarm-create-pin"
       tags:
         - "Alarm"
@@ -1320,8 +1324,8 @@ paths:
   
   /api/v2/alarm/pin/slot/:slot/chal/:chal/key/:key:
     delete:
-      description: "Delete user PIN."
-      summary: "Delete user PIN."
+      description: "Delete user PIN. Get challenge from unlock API and use master PIN."
+      summary: "Delete user PIN. Get challenge from unlock API and use master PIN."
       operationId: "alarm-delete-pin"
       tags:
         - "Alarm"
