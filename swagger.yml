@@ -1,7 +1,7 @@
 swagger: "2.0"
 info:
-  description: "This is the api for the INL8 V2.X.X <br>Developed By INSITE S.A.S - <b>I+D Team</b><br><ul><li>Camilo Pérez Vélez</li><li>Alejandro Rosso Pérez</li><li>Leonardo Maya Iregui</li><li>David Mora Rodriguez</li>"
-  version: "2.X.Y"
+  description: "This is the api for the INL8 v2.0.7 <br>Developed By INSITE S.A.S - <b>I+D Team</b><br><ul><li>Camilo Pérez Vélez</li><li>Alejandro Rosso Pérez</li><li>Leonardo Maya Iregui</li><li>David Mora Rodriguez</li>"
+  version: "2.0.7"
   title: "INL8"
   termsOfService: "http://insite.com.co/"
   contact:
@@ -65,6 +65,17 @@ paths:
       - "text/html"
       produces:
       - "text/html"
+      responses:
+        200:
+          description: "&#60;html>&#60;/html>"
+  /network-setup:
+    get:
+      description: "Return network configuration HTML page."
+      summary: "Return network configuration HTML page."
+      operationId: "get-network-setup-html"
+      tags:
+        - "HTML"
+        - "Network"
       responses:
         200:
           description: "&#60;html>&#60;/html>"
@@ -246,6 +257,110 @@ paths:
           description: "This is an error"
           schema:
             $ref: "#/definitions/success_false_response"
+  /api/v2/network:
+    get:
+      description: "Get available network interfaces."
+      summary: "Get available network interfaces."
+      operationId: "get-networks"
+      tags:
+        - "Network"
+      responses:
+        200:
+          description: "Available network interfaces."
+          schema:
+            type: "object"
+            properties:
+              success:
+                type: "boolean"
+                default: true
+                example: true
+              interfaces:
+                type: "array"
+                items:
+                  type: "string"
+                example: ["eth", "wifi"]
+  /api/v2/network/ip/{id}:
+    get:
+      description: "Get given interface IP info."
+      summary: "Get given interface IP info."
+      operationId: "network-get-ip-info"
+      tags:
+        - "Network"
+      parameters:
+        - in: "path"
+          name: "id"
+          required:  true
+          description:  "Network interface."
+          type:  "string"
+      responses:
+        200:
+          description: "Success response."
+          schema:
+            $ref: "#/definitions/network_ip_info_get"
+    post:
+      description: "Set given interface IP configuration."
+      summary: "Set given interface IP configuration."
+      operationId: "network-set-ip-info"
+      tags:
+        - "Network"
+      parameters:
+        - in: "path"
+          name: "id"
+          required:  true
+          description:  "Network interface."
+          type:  "string"
+        - in: "body"
+          name: "body"
+          required: true
+          description: "IP configuration."
+          schema:
+            $ref: "#/definitions/network_ip_info_set"
+      responses:
+        200:
+          description: "Success."
+          schema:
+            $ref: "#/definitions/success_response"
+  /api/v2/network/dns/{id}:
+    get:
+      description: "Get given interface DNS info."
+      summary: "Get given interface DNS info."
+      operationId: "network-get-dns-info"
+      tags:
+        - "Network"
+      parameters:
+        - in: "path"
+          name: "id"
+          required:  true
+          description:  "Network interface."
+          type:  "string"
+      responses:
+        200:
+          description: "Success response."
+          schema:
+            $ref: "#/definitions/network_dns_info_get"
+    post:
+      description: "Set given interface DNS configuration."
+      summary: "Set given interface DNS configuration."
+      operationId: "network-set-dns-info"
+      tags:
+        - "Network"
+      parameters:
+        - in: "path"
+          name: "id"
+          required:  true
+          description:  "Network interface."
+          type:  "string"
+        - in: "body"
+          name: "body"
+          required: true
+          description: "DNS configuration."
+          schema:
+            $ref: "#/definitions/network_dns_info_set"
+      responses:
+        200:
+          description: "Success."
+          schema:
+            $ref: "#/definitions/success_response"
   /api/v2/ota-hour:
     post:
       tags:
@@ -1556,6 +1671,76 @@ definitions:
         type: "array"
         items:
           type: "string"
+  network_ip_info_get:
+    type: "object"
+    properties:
+      success:
+        type: "boolean"
+        example: true
+      DHCP:
+        type: "string"
+        enum: ["on", "off"]
+        example: "on"
+      ip:
+        type: "string"
+        example: "192.168.1.123"
+      netmask:
+        type: "string"
+        example: "255.255.255.0"
+      gw:
+        type: "string"
+        example: "192.168.1.254"
+  network_ip_info_set:
+    type: "object"
+    properties:
+      DHCP:
+        type: "string"
+        enum: ["on", "off"]
+        default: "on"
+        example: "off"
+      ip:
+        type: "string"
+        description: "Required when DHCP is \"off\"."
+        example: "192.168.1.123"
+      netmask:
+        type: "string"
+        description: "Required when DHCP is \"off\"."
+        example: "255.255.255.0"
+      gw:
+        type: "string"
+        description: "Required when DHCP is \"off\"."
+        example: "192.168.1.254"
+  network_dns_info_get:
+    type: "object"
+    properties:
+      success:
+        type: "boolean"
+        example: true
+      main:
+        type: "string"
+        example: "8.8.8.8"
+      backup:
+        type: "string"
+        example: "8.8.8.8"
+      fallback:
+        type: "string"
+        example: "8.8.8.8"
+  network_dns_info_set:
+    type: "object"
+    description: "At least one server must be specified."
+    properties:
+      success:
+        type: "boolean"
+        example: true
+      main:
+        type: "string"
+        example: "8.8.8.8"
+      backup:
+        type: "string"
+        example: "8.8.8.8"
+      fallback:
+        type: "string"
+        example: "8.8.8.8"
   device_cmd: &device_cmd
     type: "object"
     properties:
