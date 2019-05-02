@@ -1746,6 +1746,27 @@ definitions:
         type: "integer"
         format: "uint64"
         example: 666
+  alarm_sensor_info: &alarm_sensor_info
+    type: "object"
+    properties:
+      name:
+        type: "string"
+      room:
+        type: "string"
+      type:
+        type: "integer"
+        enum: *alarm_sensor_types
+      mode:
+        type: "integer"
+        enum: *alarm_sensor_modes
+      delay:
+        type: "integer"
+        format: "uint8"
+        minimum: 0
+        maximum: 60
+      s:
+        type: "integer"
+        enum: [0, 1]
   alarm_sensor_cfg_obj:
     type: "object"
     properties:
@@ -1809,13 +1830,13 @@ definitions:
     properties:
       _id: 
         type: "string"
-        example: "deadbeef8badbaaaaaadf00d"
+        example: "deadbeef15baaaaaaaadf00d"
       thingName: 
         type: "string"
         example: "INL8"
       homeId: 
         type: "string"
-        example: "deadbeef8badbaaaaaadf00d"
+        example: "deadbeef15baaaaaaaadf00d"
       room: 
         type: "string"
         example: "General"
@@ -2113,6 +2134,63 @@ definitions:
                   timeguard: 10
                   zup: "z3"
                   zdown: "z4"
+          sensors:
+            type: "object"
+            properties:
+              s1:
+                <<: *alarm_sensor_info
+                example:
+                  name: "Sensor 1"
+                  room: "Sensor 1 room"
+                  type: 1
+                  mode: 1
+                  delay: 0
+                  s: 0
+              s2:
+                <<: *alarm_sensor_info
+                example:
+                  name: "Sensor 2"
+                  room: "Sensor 2 room"
+                  type: 2
+                  mode: 2
+                  delay: 10
+                  s: 0
+              s3:
+                <<: *alarm_sensor_info
+                example:
+                  name: "Sensor 3"
+                  room: "Sensor 3 room"
+                  type: 1
+                  mode: 1
+                  delay: 0
+                  s: 0
+              s4:
+                <<: *alarm_sensor_info
+                example:
+                  name: "Sensor 4"
+                  room: "Sensor 4 room"
+                  type: 3
+                  mode: 2
+                  delay: 0
+                  s: 0
+              s5:
+                <<: *alarm_sensor_info
+                example:
+                  name: "Sensor 5"
+                  room: "Sensor 5 room"
+                  type: 1
+                  mode: 1
+                  delay: 15
+                  s: 1
+              s6:
+                <<: *alarm_sensor_info
+                example:
+                  name: "Sensor 6"
+                  room: "Sensor 6 room"
+                  type: 2
+                  mode: 2
+                  delay: 20
+                  s: 0
   info:
     type: "object"
     properties:
