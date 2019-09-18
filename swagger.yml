@@ -1,7 +1,7 @@
 swagger: "2.0"
 info:
-  description: "This is the api for the INL8 v2.0.7 <br>Developed By INSITE S.A.S - <b>I+D Team</b><br><ul><li>Camilo Pérez Vélez</li><li>Alejandro Rosso Pérez</li><li>Leonardo Maya Iregui</li><li>David Mora Rodriguez</li>"
-  version: "2.0.7"
+  description: "This is the api for the INL8 v3.1.1 <br>Developed By INSITE S.A.S - <b>I+D Team</b><br><ul><li>Camilo Pérez Vélez</li><li>Alejandro Rosso Pérez</li><li>Leonardo Maya Iregui</li><li>David Mora Rodriguez</li>"
+  version: "3.1.1"
   title: "INL8"
   termsOfService: "http://insite.com.co/"
   contact:
@@ -419,6 +419,81 @@ paths:
           description: "This is an error"
           schema:
             $ref: "#/definitions/success_false_response"
+  /api/v2/room:
+    post:
+      summary: "Create new room."
+      description: "Create a new room on device to which zones can be assigned."
+      operationId: "createRoom"
+      tags:
+        - "Configurations"
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "New room info."
+          required: true
+          schema:
+            $ref: "#/definitions/create_room_obj"
+      responses:
+        200:
+          description: "Operation result"
+          schema:
+            type: "object"
+            properties:
+              success:
+                type: "boolean"
+                example: true
+              rid:
+                type: "string"
+                example: "r1"
+  /api/v2/room/{id}:
+    put:
+      summary: "Edit existing room."
+      description: "Edit an existing room."
+      operationId: "editRoom"
+      tags:
+        - "Configurations"
+      parameters:
+        - in: "path"
+          name: "id"
+          description: "ID of the room to be edited."
+          required: true
+          type: "string"
+        - in: "body"
+          name: "body"
+          description: "New room info."
+          required: true
+          schema:
+            $ref: "#/definitions/create_room_obj"
+      responses:
+        200:
+          description: "Operation result"
+          schema:
+            type: "object"
+            properties:
+              success:
+                type: "boolean"
+                example: true
+    delete:
+      summary: "Remove existing room."
+      description: "Remove an existing room."
+      operationId: "deleteRoom"
+      tags:
+        - "Configurations"
+      parameters:
+        - in: "path"
+          name: "id"
+          description: "ID of the room to be edited."
+          required: true
+          type: "string"
+      responses:
+        200:
+          description: "Operation result"
+          schema:
+            type: "object"
+            properties:
+              success:
+                type: "boolean"
+                example: true
   /api/v2/custom-device:
     post:
       description: "Create custom zone on device."
@@ -1658,31 +1733,14 @@ definitions:
         type: "string"
       offline:
         type: "boolean"
-        example: true
-      r1n:
+      inmoteId:
         type: "string"
-        description: "Eoom 1 name"
-      r2n:
+      inmoteToken:
         type: "string"
-        description: "Eoom 2 name"
-      r3n:
+      email:
         type: "string"
-        description: "Eoom 3 name"
-      r4n:
+      password:
         type: "string"
-        description: "Eoom 4 name"
-      r5n:
-        type: "string"
-        description: "Eoom 5 name"
-      r6n:
-        type: "string"
-        description: "Eoom 6 name"
-      r7n:
-        type: "string"
-        description: "Eoom 7 name"
-      r8n:
-        type: "string"
-        description: "Eoom 8 name"
       z1:
         type: "string"
         description: "Zone 1 name"
@@ -1731,30 +1789,6 @@ definitions:
       z8r:
         description: "Zone 8 room id"
         type: "string"
-      z1type:
-        description: "Zone 1 type"
-        type: "integer"
-      z2type:
-        description: "Zone 2 type"
-        type: "integer"
-      z3type:
-        description: "Zone 3 type"
-        type: "integer"
-      z4type:
-        description: "Zone 4 type"
-        type: "integer"
-      z5type:
-        description: "Zone 5 type"
-        type: "integer"
-      z6type:
-        description: "Zone 6 type"
-        type: "integer"
-      z7type:
-        description: "Zone 7 type"
-        type: "integer"
-      z8type:
-        description: "Zone 8 type"
-        type: "integer"
   setOta:
     type: "object"
     properties:
@@ -1876,19 +1910,27 @@ definitions:
         type: "boolean"
       hideInMacro:
         type: "boolean"
+  create_room_obj:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+        example: "Room name"
   zone_types:
     type: "integer"
-    enum: &zone_types [1, 2, 3, 4, 5]
+    enum: &zone_types [1, 2, 3, 4, 5, 6]
     description: >
       * 1: Light
       
-      * 2: Shade
+      * 2: Curtain
       
       * 3: Screen
       
       * 4: Door
       
-      * 5: Alarm siren
+      * 5: Security
+      
+      * 6: Projector
   zone_info: &zone_info
     type: "object"
     properties:
@@ -1896,16 +1938,21 @@ definitions:
         type: "integer"
         minimum: 1
         maximum: 8
+        example: 1
       n:
         type: "string"
+        example: "Luz 1"
       rid:
         type: "string"
+        example: "r1"
       type:
         type: "integer"
         enum: *zone_types
+        example: 1
       s:
         type: "integer"
         enum: [0, 1]
+        example: 0
   custom_zone_info: &custom_zone_info
     type: "object"
     properties:
@@ -1917,7 +1964,7 @@ definitions:
         example: "Zone room"
       type:
         type: "integer"
-        example: 1
+        example: 0
       pressAndHold:
         type: "boolean"
         example: true
@@ -1946,7 +1993,7 @@ definitions:
         example: 2
       deviceType:
         type: "integer"
-        example: 1
+        example: 0
       pressAndHold:
         type: "boolean"
         example: false
@@ -2064,7 +2111,7 @@ definitions:
         type: "string"
         format: "binary"
         description: "Authentication key."
-        example: "9eccb3be22d297fe1e0b092018d0ff282d0fdaa1c28af83763b740b458b83423"
+        example: "deadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef"
       chal:
         type: "integer"
         format: "uint64"
@@ -2080,7 +2127,7 @@ definitions:
         type: "string"
         format: "binary"
         description: "Authentication key."
-        example: "9eccb3be22d297fe1e0b092018d0ff282d0fdaa1c28af83763b740b458b83423"
+        example: "deadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef"
       chal:
         type: "integer"
         format: "uint64"
@@ -2113,7 +2160,7 @@ definitions:
         type: "string"
         format: "binary"
         description: "Authentication key."
-        example: "9eccb3be22d297fe1e0b092018d0ff282d0fdaa1c28af83763b740b458b83423"
+        example: "deadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef"
       chal:
         type: "integer"
         format: "uint64"
@@ -2149,7 +2196,7 @@ definitions:
         type: "string"
         format: "binary"
         description: "Ciphered PIN."
-        example: "0161ff9f7fee806f35638b406c180af1"
+        example: "deadbeefdeadbeefdeadbeefdeadbeef"
       name:
         type: "string"
         example: "PIN 1"
