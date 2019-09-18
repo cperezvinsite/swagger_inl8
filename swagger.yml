@@ -279,7 +279,7 @@ paths:
                 items:
                   type: "string"
                 example: ["eth", "wifi"]
-  /api/v2/network/ip/{id}:
+  /api/v2/network/ip/{if}:
     get:
       description: "Get given interface IP info."
       summary: "Get given interface IP info."
@@ -288,7 +288,7 @@ paths:
         - "Network"
       parameters:
         - in: "path"
-          name: "id"
+          name: "if"
           required:  true
           description:  "Network interface."
           type:  "string"
@@ -306,7 +306,7 @@ paths:
         - "Network"
       parameters:
         - in: "path"
-          name: "id"
+          name: "if"
           required:  true
           description:  "Network interface."
           type:  "string"
@@ -322,7 +322,7 @@ paths:
           description: "Success."
           schema:
             $ref: "#/definitions/success_response"
-  /api/v2/network/dns/{id}:
+  /api/v2/network/dns/{if}:
     get:
       description: "Get given interface DNS info."
       summary: "Get given interface DNS info."
@@ -331,7 +331,7 @@ paths:
         - "Network"
       parameters:
         - in: "path"
-          name: "id"
+          name: "if"
           required:  true
           description:  "Network interface."
           type:  "string"
@@ -349,7 +349,7 @@ paths:
         - "Network"
       parameters:
         - in: "path"
-          name: "id"
+          name: "if"
           required:  true
           description:  "Network interface."
           type:  "string"
@@ -360,6 +360,60 @@ paths:
           description: "DNS configuration."
           schema:
             $ref: "#/definitions/network_dns_info_set"
+      responses:
+        200:
+          description: "Success."
+          schema:
+            $ref: "#/definitions/success_response"
+  /api/v2/network/hostname/{if}:
+    get:
+      description: "Get given interface hostname."
+      summary: "Get given interface hostname."
+      operationId: "network-get-hostname"
+      tags:
+        - "Network"
+      parameters:
+        - in: "path"
+          name: "if"
+          required:  true
+          description:  "Network interface."
+          type:  "string"
+          enum: ["eth", "wifi"]
+      responses:
+        200:
+          description: "Success."
+          schema:
+            type: "object"
+            properties:
+              success:
+                type: "boolean"
+                example: true
+              hostname:
+                type: "string"
+                example: "espressif"
+    post:
+      description: "Set given interface hostname."
+      summary: "Set given interface hostname."
+      operationId: "network-set-hostname"
+      tags:
+        - "Network"
+      parameters:
+        - in: "path"
+          name: "if"
+          required:  true
+          description:  "Network interface."
+          type:  "string"
+          enum: ["eth", "wifi"]
+        - in: "body"
+          name: "body"
+          required: true
+          description: "New hostname."
+          schema:
+            type: "object"
+            properties:
+              hostname:
+                type: "string"
+                example: "espressif"
       responses:
         200:
           description: "Success."
